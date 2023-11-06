@@ -1,0 +1,185 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>A'zolar {{ root_type }}</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+              <li class="breadcrumb-item active">members</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+
+
+    <section class="content">
+
+      <!-- Default box -->
+      <div class="card card-solid">
+        <div class="card-body pb-0">
+          <div class="row d-flex align-items-stretch">
+              {% if  roots %}
+
+              {% for i in roots %}
+              {% if i.ut == 1 %}
+              {% else %}
+
+            <div class="col-12 col-sm-6 col-md-3 d-flex align-items-stretch">
+              <div class="card bg-light">
+                <div class="card-header text-muted border-bottom-0">
+                    {{ i.prof }}
+                </div>
+                <div class="card-body pt-0">
+                  <div class="row">
+                    <div class="col-7">
+                      <h2 class="lead"><b>{{ i }}</b></h2>
+                      <p class="text-muted text-sm"><b>About: </b> {{ i.info }}</p>
+                      <ul class="ml-4 mb-0 fa-ul text-muted">
+                        <li class="small"><span class="fa-li"><i class="fas fa-lg fa-phone"></i></span> Phone #: + {{i.phone }}</li>
+                      </ul>
+                    </div>
+                    <div class="col-5 text-center">
+                        {% if i.img %}
+                      <img src="{{ i.img.url }}" alt="" class="img-circle img-fluid">
+                        {% else %}
+                      <img {% if i.gender %} src="{% static 'dist/img/user8-128x128.jpg' %}"
+
+                           {% else %}
+                           src="{% static 'dist/img/user4 -128x128.jpg' %}"
+                           {% endif %}
+                           alt="" class="img-circle img-fluid">
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <div class="text-right">
+                      {% if not i.is_spam %}
+                              <a href="{% url 'spammer' pk=i.id  dut=i.ut %}" title="Spam" class="btn btn-danger btn-circle btn-sm">
+                                    <i class="fas fa-hand"></i>
+                                </a>
+                      {% endif %}
+
+                            {% if i.is_active %}
+                            <a href="{% url 'banner' user_id=i.id type=i.ut status=0 %}" title="Ban" class="btn btn-success btn-circle btn-sm">
+                                <i class="fas fa-thumbs-down"></i>
+                            </a>
+                                    {% if i.ut == 3 %}
+                                        <a href="{% url 'grader' pk=i.id ut=2 dut=i.ut %}" title="Grade up to admin" class="btn btn-primary btn-circle btn-sm">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </a>
+                                         <a href="{% url 'grader' pk=i.id ut=4 dut=i.ut  %}" title="Gradedown to member" class="btn btn-danger btn-circle btn-sm">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </a>
+                                    {% elif i.ut == 2 %}
+                                        <a href="{% url 'grader' pk=i.id ut=3 dut=i.ut %}" title="Grade doctor to doctor" class="btn btn-danger btn-circle btn-sm">
+                                            <i class="fas fa-arrow-down"></i>
+                                        </a>
+                                         <a href="{% url 'grader' pk=i.id ut=4 dut=i.ut %}" title="Gradedown to member" class="btn btn-danger btn-circle btn-sm">
+                                            <i class="fas fa-angles-down"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'grader' pk=i.id ut=3 dut=i.ut %}" title="Grade up to doctor" class="btn btn-primary btn-circle btn-sm">
+                                            <i class="fas fa-arrow-up"></i>
+                                        </a>
+                                         <a href="{% url 'grader' pk=i.id ut=2 dut=i.ut %}" title="Grade up to admin " class="btn btn-success btn-circle btn-sm">
+                                            <i class="fa-solid fa-angles-up"></i>
+                                        </a>
+                                    {% endif %}
+                                 {% else %}
+                        <a href="{% url 'banner' user_id=i.id type=i.ut status=1 %}" title="Unban" class="btn btn-danger  btn-circle btn-sm">
+                            <i class="fas fa-thumbs-up"></i>
+                        </a>
+
+
+                        {% if i.ut == 3 %}
+                            <a href="{% url 'grader' pk=i.id ut=2 dut=i.ut %}" title="Grade up to admin" class="btn btn-primary disabled btn-circle btn-sm">
+                                <i class="fas fa-arrow-up"></i>
+                            </a>
+                             <a href="{% url 'grader' pk=i.id ut=4 dut=i.ut  %}" title="Gradedown to member" class="btn btn-danger disabled btn-circle btn-sm">
+                                <i class="fas fa-arrow-down"></i>
+                            </a>
+                        {% elif i.ut == 2 %}
+                            <a href="{% url 'grader' pk=i.id ut=3 dut=i.ut %}" title="Grade doctor to doctor" class="btn btn-danger disabled btn-circle btn-sm">
+                                <i class="fas fa-arrow-down"></i>
+                            </a>
+                             <a href="{% url 'grader' pk=i.id ut=4 dut=i.ut %}" title="Gradedown to member" class="btn btn-danger disabled btn-circle btn-sm">
+                                <i class="fas fa-angles-down"></i>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'grader' pk=i.id ut=3 dut=i.ut %}" title="Grade up to doctor" class="btn btn-primary disabled btn-circle btn-sm">
+                                <i class="fas fa-arrow-up"></i>
+                            </a>
+                             <a href="{% url 'grader' pk=i.id ut=2 dut=i.ut %}" title="Grade up to admin " class="btn btn-success disabled btn-circle btn-sm">
+                                <i class="fa-solid fa-angles-up"></i>
+                            </a>
+                        {% endif %}
+                        {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+              {% endif %}
+              {% endfor  %}
+                {% else %}
+                <h3 class="text-danger">Uzur bu bo'limda hech narsa yo'q </h3>
+            <!-- /.card-body -->
+              {% endif %}
+          </div>
+        </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          <nav aria-label="Contacts Page Navigation">
+            <ul class="pagination justify-content-center m-0">
+                {% if roots.has_previous %}
+                     <li class="page-item "><a class="page-link" href="?page={{ roots.previous_page_number }}" ><< </a></li>
+                {% endif %}
+
+                {% for i in page_len %}
+                    {% if i.current_page == i %}
+                         <li class="page-item active"><a class="page-link" >{{ i }} </a></li>
+                    {% else %}
+                         <li class="page-item"><a class="page-link" href="?page={{i}}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if roots.has_next %}
+                    <li class="page-item "><a class="page-link" href="?page={{ roots.next_page_number }}" > >> </a></li>
+                {% endif %}
+
+
+            </ul>
+          </nav>
+                                           <hr>
+                <div class="row">
+                    <div class="col-xl-6 col-md-6 mb-4">
+                        <a href="{% url 'home' %}"  class="btn btn-info" >
+                           <span class="icon text-white-50">
+                                <i class="fas fa-home"></i>
+                            </span>
+                            <span class="text">Bosh Menu</span>
+                       </a>
+                    </div>
+                </div>
+        </div>
+        <!-- /.card-footer -->
+      </div>
+      <!-- /.card -->
+
+    </section>
+    <!-- Main content -->
+
+    <!-- /.content -->
+  </div>
+
+{% endblock %}
+
